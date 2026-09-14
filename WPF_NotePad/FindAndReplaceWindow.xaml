@@ -1,0 +1,40 @@
+﻿<Window x:Name="NotePadFindAndReplaceWindow" x:Class="WPF_NotePad.FindAndReplaceWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WPF_NotePad"
+        mc:Ignorable="d"
+        Title="NotePad - FindAndReplace" Height="250" Width="500" ResizeMode="NoResize">
+    <Grid Background="LightGray">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="10*"/>
+            <ColumnDefinition Width="70*"/>
+            <ColumnDefinition Width="20*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <TextBlock Grid.Row="0" Grid.Column="0" Text="What:" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="16"/>
+        <TextBlock Grid.Row="1" Grid.Column="0" Text="With:" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="16"/>
+        <TextBox x:Name="WhatTextBox" Grid.Row="0" Grid.Column="1" Text="" VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="5" FontSize="16" TextChanged="WhatTextBox_TextChanged"/>
+        <TextBox x:Name="WithTextBox" Grid.Row="1" Grid.Column="1" Text="" VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="5" FontSize="16"/>
+        <Button x:Name="FindNextButton" Grid.Row="0" Grid.Column="2" Content="Find Next" FontSize="16" Click="FindNextButton_Click" IsEnabled="False"/>
+        <Button x:Name="ReplaceButton" Grid.Row="1" Grid.Column="2" Content="Replace" FontSize="16" Click="ReplaceButton_Click" IsEnabled="False"/>
+        <Button x:Name="ReplaceAllButton" Grid.Row="2" Grid.Column="2" Content="Replace All" FontSize="16" Click="ReplaceAllButton_Click" IsEnabled="False"/>
+        <Button x:Name="CancelButton" Grid.Row="3" Grid.Column="2" Content="Cancel" FontSize="16" Click="CancelButton_Click"/>
+        <CheckBox x:Name="CaseSensitiveCheckBox" Grid.Row="2" Grid.ColumnSpan="2" Content="Case Sensitive" VerticalAlignment="Center" Margin="10,0,200,0">
+            <CheckBox.LayoutTransform>
+                <ScaleTransform ScaleX="1.4" ScaleY="1.4" />
+            </CheckBox.LayoutTransform>
+        </CheckBox>
+        <CheckBox x:Name="TextWrappingCheckBox" Grid.Row="3" Grid.ColumnSpan="2" Content="Text Wrapping" VerticalAlignment="Center" Margin="10,0,200,0">
+            <CheckBox.LayoutTransform>
+                <ScaleTransform ScaleX="1.4" ScaleY="1.4" />
+            </CheckBox.LayoutTransform>
+        </CheckBox>
+    </Grid>
+</Window>

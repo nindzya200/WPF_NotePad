@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net9.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>True</UseWindowsForms>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="icons8-блокнот-100.png" />
+    <None Remove="NotePad_ico_48.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="icons8-блокнот-100.png" />
+    <Resource Include="NotePad_ico_48.png" />
+  </ItemGroup>
+
+</Project>
