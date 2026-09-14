@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
+using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -18,7 +19,7 @@ namespace WPF_NotePad
     /// </summary>
     public partial class MainWindow : Window
     {
-        private bool IsTextEdit = false;
+        private bool willTextEdit = true;
         public MainWindow()
         {
             InitializeComponent();
@@ -26,49 +27,41 @@ namespace WPF_NotePad
 
         private void NotePadTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            NotePadMainWindow.Title = !NotePadMainWindow.Title.Contains('*') ? "*" + NotePadMainWindow.Title : NotePadMainWindow.Title;
-            IsTextEdit = true;
+            TabItem selectedTabItem = NotePadTabs.SelectedItem as TabItem;
+            if (selectedTabItem != null)
+            {
+                string tabItemHeader = selectedTabItem.Header.ToString();
+                tabItemHeader = willTextEdit && !tabItemHeader.Contains("*") ? "*" + tabItemHeader : tabItemHeader;
+                selectedTabItem.Header = tabItemHeader;
+                selectedTabItem.Tag = NotePadTextBox.Text;
+            }
+            else
+            {
+                NotePadTabs.Items.Add(new TabItem { Header = "*Noname", Tag = NotePadTextBox.Text, IsSelected = true });
+            }
+            willTextEdit = false;
         }
 
         private void CreateFileButton_Click(object sender, RoutedEventArgs e)
         {
-            if (IsTextEdit)
-            {
-                if (System.Windows.MessageBox.Show("Do you want to save the changes to the file?", "NotePad",
-                    MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
-                {
-                    System.Windows.Forms.SaveFileDialog saveFileDialog = new System.Windows.Forms.SaveFileDialog();
-                    saveFileDialog.Filter = "txt files (*.txt)|*.txt";
-                    if (saveFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.Cancel) return;
-                    File.WriteAllText(saveFileDialog.FileName, NotePadTextBox.Text);
-                    NotePadMainWindow.Title = Path.GetFileName(saveFileDialog.FileName) + " - NotePad";
-                }
-            }
-            NotePadTextBox.Text = "";
-            NotePadMainWindow.Title = "Noname - NotePad";
-            IsTextEdit = false;
+            NotePadTabs.Items.Add(new TabItem { Header = "Noname", Tag = "", IsSelected = true });
+            willTextEdit = true;
         }
 
         private void OpenFileButton_Click(object sender, RoutedEventArgs e)
         {
-            if (IsTextEdit)
-            {
-                if (System.Windows.MessageBox.Show("Do you want to save the changes to the file?", "NotePad",
-                    MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
-                {
-                    System.Windows.Forms.SaveFileDialog saveFileDialog = new System.Windows.Forms.SaveFileDialog();
-                    saveFileDialog.Filter = "txt files (*.txt)|*.txt";
-                    if (saveFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.Cancel) return;
-                    File.WriteAllText(saveFileDialog.FileName, NotePadTextBox.Text);
-                    NotePadMainWindow.Title = Path.GetFileName(saveFileDialog.FileName) + " - NotePad";
-                }
-            }
             System.Windows.Forms.OpenFileDialog openFileDialog = new System.Windows.Forms.OpenFileDialog();
             openFileDialog.Filter = "txt files (*.txt)|*.txt";
             if (openFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.Cancel) return;
+            NotePadTabs.Items.Add(new TabItem
+            {
+                Header = Path.GetFileName(openFileDialog.FileName),
+                IsSelected = true,
+                Tag = ""
+            });
+            willTextEdit = false;
             NotePadTextBox.Text = File.ReadAllText(openFileDialog.FileName);
-            NotePadMainWindow.Title = Path.GetFileName(openFileDialog.FileName) + " - NotePad";
-            IsTextEdit = false;
+            willTextEdit = true;
         }
 
         private void SaveFileButton_Click(object sender, RoutedEventArgs e)
@@ -77,8 +70,13 @@ namespace WPF_NotePad
             saveFileDialog.Filter = "txt files (*.txt)|*.txt";
             if (saveFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.Cancel) return;
             File.WriteAllText(saveFileDialog.FileName, NotePadTextBox.Text);
-            NotePadMainWindow.Title = Path.GetFileName(saveFileDialog.FileName) + " - NotePad";
-            IsTextEdit = false;
+            TabItem selectedTabItem = NotePadTabs.SelectedItem as TabItem;
+            if (selectedTabItem != null)
+            {
+                selectedTabItem.Header = Path.GetFileName(saveFileDialog.FileName);
+                selectedTabItem.Tag = NotePadTextBox.Text;
+            }
+            willTextEdit = true;
         }
 
         private void EditBackgroundButton_Click(object sender, RoutedEventArgs e)
@@ -193,6 +191,32 @@ namespace WPF_NotePad
                 return;
             }
             NotePadTextBox.Text = NotePadTextBox.Text.Replace(FindWhat, ReplaceWith);
+        }
+        private void CloseFileButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (!willTextEdit)
+            {
+                if (System.Windows.MessageBox.Show("Do you want to save the changes to the file?", "NotePad",
+                    MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+                {
+                    System.Windows.Forms.SaveFileDialog saveFileDialog = new System.Windows.Forms.SaveFileDialog();
+                    saveFileDialog.Filter = "txt files (*.txt)|*.txt";
+                    if (saveFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.Cancel) return;
+                    File.WriteAllText(saveFileDialog.FileName, NotePadTextBox.Text);
+                }
+            }
+            TabItem selectedTabItem = NotePadTabs.SelectedItem as TabItem;
+            NotePadTextBox.Text = "";
+            NotePadTabs.Items.Remove(selectedTabItem);
+            willTextEdit = true;
+        }
+
+        private void NotePadTabs_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            TabItem selectedTabItem = NotePadTabs.SelectedItem as TabItem;
+            if (selectedTabItem == null || selectedTabItem.Tag == null) return;
+            NotePadTextBox.Text = selectedTabItem.Tag.ToString();
+            string tabItemHeader = selectedTabItem.Header.ToString();
         }
     }
 }

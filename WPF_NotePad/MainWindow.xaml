@@ -5,15 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WPF_NotePad"
         mc:Ignorable="d"
-        Title="Noname - NotePad" Height="450" Width="800" Icon="/NotePad_ico_48.png">
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-
-        <StackPanel Grid.Row="0" Orientation="Horizontal" Background="LightGray">
+        Title="NotePad" Height="450" Width="800" Icon="/NotePad_ico_48.png">
+    <DockPanel>
+        <StackPanel Orientation="Horizontal" Background="LightGray" DockPanel.Dock="Top">
             <Button x:Name="CreateFileButton" Content="Create File" Background="LightGray" Click="CreateFileButton_Click"/>
             <Button x:Name="OpenFileButton" Content="Open File" Background="LightGray" Click="OpenFileButton_Click"/>
             <Button x:Name="SaveFileButton" Content="Save File" Background="LightGray" Click="SaveFileButton_Click"/>
@@ -21,8 +15,11 @@
             <Button x:Name="EditForegroundButton" Content="Edit Foreground Color" Background="LightGray" Click="EditForegroundButton_Click"/>
             <Button x:Name="EditFontButton" Content="Edit Font" Background="LightGray" Click="EditFontButton_Click"/>
             <Button x:Name="FindAndReplaceButton" Content="Find And Replace" Background="LightGray" Click="FindAndReplaceButton_Click"/>
+            <Button x:Name="CloseFileButton" Content="Close File" Background="LightGray" Click="CloseFileButton_Click"/>
         </StackPanel>
-        <Separator x:Name="Sep" Grid.Row="1" Margin="0" BorderBrush="Gray"/>
-        <TextBox x:Name="NotePadTextBox" Grid.Row="2" AcceptsReturn="True" TextWrapping="NoWrap" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Text="" Background="LightGray" BorderThickness="0" TextChanged="NotePadTextBox_TextChanged"/>
-    </Grid>
+        <TabControl x:Name="NotePadTabs" Background="LightGray" BorderThickness="0" BorderBrush="LightGray" TabStripPlacement="Top" SelectedIndex="0" DockPanel.Dock="Top" SelectionChanged="NotePadTabs_SelectionChanged">
+            <TabItem Header="Noname" IsSelected="True" Tag=""></TabItem>
+        </TabControl>
+            <TextBox x:Name="NotePadTextBox" AcceptsReturn="True" TextWrapping="NoWrap" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Text="" Background="LightGray" BorderThickness="0" TextChanged="NotePadTextBox_TextChanged" DockPanel.Dock="Bottom"/>
+    </DockPanel>
 </Window>

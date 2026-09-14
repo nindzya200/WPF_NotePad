@@ -15,7 +15,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="icons8-блокнот-100.png" />
     <Resource Include="NotePad_ico_48.png" />
   </ItemGroup>
 
